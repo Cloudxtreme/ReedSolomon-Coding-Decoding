@@ -26,17 +26,17 @@ msg = gf(data,m,primitive);
 
 disp('Test 1');
 
-p1 = 0.1;
-
-
 c1 = rsenc(msg,n,k); %Encoding
+[rec1,nerr1] = gf_bsc(c1,m,0.02,20);
+d1 = rsdec(rec1,n,k); %deconding
 
-% Sending message throught a binary symmetric channel
-%[ndata1,err1] = bsc(c1.x,p1);
-d1 = rsdec(c1,n,k); %deconding
+disp('Number of errors : ');
+disp(nerr1);    
 
 if isequal(d1,msg) == 1
     disp('All ok!');
+else
+    disp('Not recovered!');
 end
 
 %% Second Test
@@ -61,11 +61,33 @@ end
 disp('Test 3');
 
 c3 = rsenc(msg,n,k);
+[rec3,nerr3] = gf_bsc(c3,m,0.075,20);
+d3 = rsdec(rec3,n,k);
 
-d3 = rsdec(c3,n,k);
+disp('Number of errors : ');
+disp(nerr3);    
 
 if isequal(d3,msg) == 1
     disp('All ok!');
+else
+    disp('Not Recovered!');
 end
 
+clear c3
+clear d3
 
+%% Fourth Test
+% Heavy noise channel
+
+c4 = rsenc(msg,n,k);
+[rec4,nerr4] = gf_bsc(c4,m,0.1,22);
+d4 = rsdec(rec4,n,k);
+
+disp('Number of errors : ');
+disp(nerr4);    
+
+if isequal(d4,msg) == 1
+    disp('All ok!');
+else
+    disp('Not Recovered!');
+end
