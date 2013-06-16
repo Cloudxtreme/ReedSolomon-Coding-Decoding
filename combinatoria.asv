@@ -45,15 +45,13 @@ disp('Test 2');
 
 c2 = rsenc(msg,n,k);
 [rec2,nerr2] = gf_bsc(c2,m,0.05,20);
-d2 = rsdec(rec2,n,k);
+d2 = rsdec(c2,n,k);
 
 disp('Number of errors : ');
 disp(nerr2);    
 
 if isequal(d2,msg) == 1
     disp('All ok!');
-else
-    disp('Not recovered!');
 end
 
 
