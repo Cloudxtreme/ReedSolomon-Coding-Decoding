@@ -3,7 +3,7 @@
 
 m =4 ;
 
-mat_poly = [ 1 1;
+mat_poly = [ 2
     1 2;
     1 4;
     1 8;
@@ -16,9 +16,9 @@ poly = gf(mat_poly(1:1,1:2),m);
 
 for i = 2:rows
     
+    
     temp_p = gf(mat_poly(i:i,1:2),m);
     poly = conv(poly,temp_p);
     
+    display(poly);
 end
-
-display(poly);
