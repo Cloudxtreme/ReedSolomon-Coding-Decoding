@@ -17,7 +17,7 @@ mat_poly = [ 1 1;
     1 6];
 
 msg = [0 1 2 3 4 5 6 7 8];
-error = [10 0 0 0 0 0 0 0 0 0 0 1 0 0 0];
+error = [10 0 0 0 0 0 2 0 0 0 0 1 0 0 0];
 mm = -1;
 
 t = (n-k)/2;
@@ -165,7 +165,7 @@ num_err = rank(m_ext);
 %% Calcolo la posizione degli errori
 
 m_mat = m_ext(1:num_err,1:num_err); % num_err x num_err
-term_not = m_ext(1:num_err,num_err+1); % 1 x num_err
+term_not = syndromes(num_err+1:2*num_err)'; % 1 x num_err
 
 sigma_vet = m_mat \ term_not;
 
@@ -191,7 +191,7 @@ m_mat2 = [];
 
 for i=0:num_err-1
     
-    m_mat2 = [m_mat2 power(temp_err,i)];
+    m_mat2 = [m_mat2; power(temp_err,i)'];
     
 end
 
@@ -211,6 +211,8 @@ end
 
 
 %% Correcting errors
+
+msg_dec = msg_recv - error_vect;
 
 
 
