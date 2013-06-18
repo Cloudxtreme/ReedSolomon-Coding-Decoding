@@ -30,6 +30,7 @@ c1 = rsenc(msg,n,k); %Encoding
 [rec1,nerr1] = gf_bsc(c1,m,0.02,20);
 d1 = rsdec(rec1,n,k); %deconding
 
+disp(['Probability : ' '2%']);
 disp('Number of errors : ');
 disp(nerr1);    
 
@@ -47,6 +48,7 @@ c2 = rsenc(msg,n,k);
 [rec2,nerr2] = gf_bsc(c2,m,0.05,20);
 d2 = rsdec(rec2,n,k);
 
+disp(['Probability : ' '5%']);
 disp('Number of errors : ');
 disp(nerr2);    
 
@@ -64,6 +66,7 @@ c3 = rsenc(msg,n,k);
 [rec3,nerr3] = gf_bsc(c3,m,0.075,20);
 d3 = rsdec(rec3,n,k);
 
+disp(['Probability : ' '7.5%']);
 disp('Number of errors : ');
 disp(nerr3);    
 
@@ -83,6 +86,7 @@ c4 = rsenc(msg,n,k);
 [rec4,nerr4] = gf_bsc(c4,m,0.1,22);
 d4 = rsdec(rec4,n,k);
 
+disp(['Probability : ' '10%']);
 disp('Number of errors : ');
 disp(nerr4);    
 
