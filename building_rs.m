@@ -17,10 +17,21 @@ mat_poly = [ 1 1;
     1 6];
 
 msg = [0 1 2 3 4 5 6 7 8];
-error = [1 0 0 0 0 1 0 0 0 0 0 0 0 0 0];
+error = [10 0 0 0 0 0 0 0 0 0 0 1 0 0 0];
 mm = -1;
 
-%% Start
+t = (n-k)/2;
+
+%gen
+tab_pow = [];
+prim_el = gf(2,m);
+
+for i=0:14
+    tab_pow = [tab_pow prim_el^i];
+end
+
+%% Calcolo il polinomio generatore
+
 [rows,cols] = size(mat_poly);
 
 gen_poly = gf(mat_poly(1:1,1:2),m);
@@ -37,8 +48,10 @@ clear cols
 
 %% Generating matrix
 
+%Estraggo il polinomio generatore
 temp_copy = gen_poly.x;
 
+%Inverto il polinomio
 temp_copy = temp_copy(rows+1:-1:1);
 
 gen_mat = [];
@@ -98,7 +111,6 @@ for i = k:n-1
      
 end
 
-%msg_send = circshift(msg_send,[0 n-k]);
 msg_send = gf(msg_send,m);
 
 [quot,rem] = deconv(msg_send,gen_poly);
@@ -106,9 +118,9 @@ msg_send = gf(msg_send,m);
 % Now msg_send belongs to C, 
 msg_send = msg_send - rem;
 
-%for
-display('Codewod to send');
-display(msg_send);
+% clear
+clear quot 
+clear rem
 
 %% Channel
 
@@ -137,15 +149,68 @@ else
     display('Si sono verificati errori');
 end
 
+%% Calcolo il numero di errori
 % calcolo m'
 
+m_ext = gf([],m);
+
+for i = 1:t
+    
+    m_ext = [m_ext syndromes(i:i+t)'];
+    
+end
+
+num_err = rank(m_ext);
+
+%% Calcolo la posizione degli errori
+
+m_mat = m_ext(1:num_err,1:num_err); % num_err x num_err
+term_not = m_ext(1:num_err,num_err+1); % 1 x num_err
+
+sigma_vet = m_mat \ term_not;
+
+sigma_vet = sigma_vet';
+display(sigma_vet);
+sigma_vet = sigma_vet(num_err:-1:1);
+
+%Trovo 
+%TODO: Per qualche motivo le posizioni sono invertite 15-> 1 2->14
+temp_err = roots([1 sigma_vet]);
+error_positions = [];
+%Fix perchè non so dove sbaglio :S
+
+for i=1:num_err
+    
+    error_positions = [error_positions 16-find(tab_pow == temp_err(i))];
+    
+end
+
+% Calcolo la grandezza degli errori
+
+m_mat2 = [];
+
+for i=0:num_err-1
+    
+    m_mat2 = [m_mat2 power(temp_err,i)];
+    
+end
+
+term_not2 = m_ext(1:num_err,1);
+
+error_mag = m_mat2 \ term_not2;
+
+%% Rebuilding error vector
+
+error_vect = gf(zeros([1 n]),m);
+
+for i= 1:num_err
+    
+    error_vect(error_positions(i)) = error_mag(i);
+    
+end
 
 
-
-
-
-
-
+%% Correcting errors
 
 
 
